@@ -12,6 +12,7 @@ from dataclasses import dataclass
 from src.logger import logging
 from src.utils import evaluate_model
 from src.exception import CustomException
+from src.utils import save_object
 
 @dataclass
 class ModelTrainerConfig:
@@ -41,7 +42,7 @@ class ModelTrainer:
 
             params = {
                     "Random Forest": {
-                        "n_estimators": [100, 200, 300],
+                        'n_estimators': [8,16,32,64,128,256],
                         "max_depth": [10, 20, 30],
                         "min_samples_split": [2, 5, 10],
                     },
@@ -51,25 +52,26 @@ class ModelTrainer:
                         "min_samples_split": [2, 5],
                     },
                     "Gradient Boosting": {
-                        "n_estimators": [100, 200],
+                        'n_estimators': [8,16,32,64,128,256],
                         "learning_rate": [0.01, 0.1],
                         "max_depth": [3, 5],
+                        'subsample':[0.6,0.7,0.75,0.8,0.85,0.9],
                     },
                     "Linear Regression": {
                         "fit_intercept": [True, False],
                     },
                     "XGBRegressor": {
-                        "n_estimators": [100, 200],
+                        'n_estimators': [8,16,32,64,128,256],
                         "learning_rate": [0.01, 0.1],
                         "max_depth": [3, 5],
                     },
                     "CatBoosting Regressor": {
-                        "iterations": [100, 200],
+                        "iterations": [50, 100, 200],
                         "learning_rate": [0.01, 0.1],
-                        "depth": [6, 10],
+                        "depth": [6, 8, 10],
                     },
                     "AdaBoost Regressor": {
-                        "n_estimators": [50, 100],
+                        'n_estimators': [8,16,32,64,128,256],
                         "learning_rate": [0.01, 0.1],
                     },
             }
@@ -90,6 +92,11 @@ class ModelTrainer:
                 raise CustomException('No best model')
             
             logging.info('Best model found')
+
+            save_object(
+                file_path=self.model_trainer_config.trained_model_filepath,
+                obj=best_model
+            )
 
             predicted = best_model.predict(X_test)
 
