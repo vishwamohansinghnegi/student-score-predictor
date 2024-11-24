@@ -85,7 +85,7 @@ class DataTransformation:
             input_test_trans = preprocessor_obj.transform(input_test_df)
 
             train_trans = np.c_[input_train_trans , np.array(target_train_df)]
-            test_trans = np.c_[input_test_trans] , np.array(target_test_df)
+            test_trans = np.c_[input_test_trans , np.array(target_test_df)]
 
             logging.info('Completed Preprocssing')
 
